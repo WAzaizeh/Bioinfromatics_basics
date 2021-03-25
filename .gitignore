@@ -1,0 +1,10 @@
+#compressed files
+*.gz
+*.zip
+*.gz
+*.tar
+*.tar.gz
+*.tar.bz2
+
+# potentially very large files
+*.genome

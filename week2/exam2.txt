@@ -1,0 +1,69 @@
+# screenshot of the exam answering process
+$ conda activate bio
+$ cd ./Desktop/Genomic_tools/week2/
+$ ls -l
+total 40624
+-rw-r--r--@ 1 wesamazaizeh  staff  10104976 Jul 19  2015 athal_wu_0_A.bam
+-rw-r--r--@ 1 wesamazaizeh  staff      6720 Jul 19  2015 athal_wu_0_A.bam.bai
+-rw-r--r--@ 1 wesamazaizeh  staff      2912 Jul 21  2015 athal_wu_0_A_annot.gtf
+-rw-r--r--@ 1 wesamazaizeh  staff  10107897 Mar 24 19:53 gencommand_proj2_data.tar.gz
+$ samtools flagstat athal_wu_0_A.bam
+221372 + 0 in total (QC-passed reads + QC-failed reads)
+0 + 0 secondary
+0 + 0 supplementary
+20419 + 0 duplicates
+218469 + 0 mapped (98.69% : N/A)
+155851 + 0 paired in sequencing
+77895 + 0 read1
+77956 + 0 read2
+142663 + 0 properly paired (91.54% : N/A)
+150045 + 0 with itself and mate mapped
+2903 + 0 singletons (1.86% : N/A)
+4938 + 0 with mate mapped to a different chr
+2120 + 0 with mate mapped to a different chr (mapQ>=5)
+$ samtools view athal_wu_0_A.bam | less
+$samtools view athal_wu_0_A.bam | cut -f7 | grep -c "*"
+65521
+$ samtools view athal_wu_0_A.bam | cut -f6 | grep -c "D"
+2451
+$ samtools view athal_wu_0_A.bam | cut -f7 | grep -c "="
+150913
+$ samtools view athal_wu_0_A.bam | cut -f6 | grep -c "N"
+0
+$ samtoos view athal_wu_0_A.bam | wc -l
+  221372
+$ samtools view -H athal_wu_0_A.bam
+@HD	VN:1.0	GO:none	SO:coordinate
+@SQ	SN:Chr1	LN:29923332	AS:wu_0.v7.fas	SP:wu_0.v7.fas
+@SQ	SN:Chr2	LN:19386101	AS:wu_0.v7.fas	SP:wu_0.v7.fas
+@SQ	SN:Chr3	LN:23042017	AS:wu_0.v7.fas	SP:wu_0.v7.fas
+@SQ	SN:Chr4	LN:18307997	AS:wu_0.v7.fas	SP:wu_0.v7.fas
+@SQ	SN:Chr5	LN:26567293	AS:wu_0.v7.fas	SP:wu_0.v7.fas
+@SQ	SN:chloroplast	LN:154478	AS:wu_0.v7.fas	SP:wu_0.v7.fas
+@SQ	SN:mitochondria	LN:366924	AS:wu_0.v7.fas	SP:wu_0.v7.fas
+@RG	ID:H100223_GAII05_0002	PL:SLX	LB:wu_PII	PI:400	DS:wu_0_Genome	SM:wu_0
+@RG	ID:Wii_PER01	PL:SLX	LB:wu_phaseI	PI:400	DS:wu_0_Genome	SM:wu_0
+@RG	ID:Wii_PER02	PL:SLX	LB:wu_phaseI	PI:400	DS:wu_0_Genome	SM:wu_0
+@RG	ID:Wii_SR03	PL:SLX	LB:wu_phaseI	PI:400	DS:wu_0_Genome	SM:wu_0
+@PG	ID:stampy	VN:1.0.3_(r627)	CL:-g /lustre/scratch103/sanger/xcg/tmp/tmp.zYfXz26246 -h /lustre/scratch103/sanger/xcg/tmp/tmp.zYfXz26246 --readgroup=ID:Wii_PER01,LB:wu_phaseI,SM:wu_0,PI:400,PL:SLX,DS:wu_0_Genome --bwaoptions=-q10 /lustre/scratch103/sanger/xcg/wu_0.v7.fas -o /lustre/scratch103/sanger/xcg/wu_0/A/aln_A1.sp0.sam -M /lustre/scratch103/sanger/xcg/wu_0/read_1_1.sp0.fq.gz /lustre/scratch103/sanger/xcg/wu_0/read_1_2.sp0.fq.gz
+@CO	TM:Fri, 17 Sep 2010 12:20:13 BST	WD:/lustre/scratch103/sanger/xcg/wu_0/self	HN:bc-16-1-07.internal.sanger.ac.uk	UN:xcg
+$ samtools view -H athal_wu_0_A.bam | grep -c "SN:"
+  7
+$ samtools view athal_wu_0_A.bam | head -1
+GAII05_0002:1:113:7822:3886#0	1187	Chr3	11699950	60	51M	=	11700332	433	AAAAAAAATGTAAAACTGCTAAATCTCTCCTCTCTAAAGAACTCGTCCCCG	CCCCCCBBBCCCCCCCCCCCCCCCCCCCCCCCCCCCBAAB??@ACBBCCCD	PQ:i:21	SM:i:37	UQ:i:0	MQ:i:37	XQ:i:0	RG:Z:H100223_GAII05_0002
+$ bedtools bamtobed -i athal_wu_0_A.bam > athal_wu_0_A.bed
+$ bedtools intersect -wo -a athal_wu_0_A.gtf -b athal_wu_0_A.bed | wc -l
+3101
+$ bedtools intersect -abam athal_wu_0_A.bam -b athal_wu_0_A_annot.gtf -bed -wo | cut -f22 > overlap.lengths
+sort oerlap.lengths -nrk1 | grep -n "^9" | head -1
+2900:9
+$ bedtools intersect -wo -a athal_wu_0_A_annot.gtf -b athal_wu_0_A.bed | cut -f10-15 | sort -u | wc -l
+    3101
+$ bedtools intersect -wo -a athal_wu_0_A_annot.gtf -b athal_wu_0_A.bed | cut -f1-9 | sort -u | grep -c "exon"
+21
+$ cut -f9 athal_wu_0_A_annot.gtf | cut -d " " -f4 | cut -d ":" -f2 | uniq | wc -l
+       4
+
+# notes: Retake before Apr 4th, while taking into consideration the exam instructions this time.
+#        Some of the information to answer questions beyond Q6 is only mentioned in the instructions
+#        page.

@@ -1,0 +1,44 @@
+# screenshot of the exam answering process
+$ cd ./Desktop/Genomic_tools/week1/gencommand_proj1_ata
+$ ls -l
+total 233296
+-rw-r--r--@  1 wesamazaizeh  staff     514192 Jun 11  2015 apple.conditionA
+-rw-r--r--@  1 wesamazaizeh  staff     517530 Jun 11  2015 apple.conditionB
+-rw-r--r--@  1 wesamazaizeh  staff     522336 Jun 11  2015 apple.conditionC
+-rw-r--r--@  1 wesamazaizeh  staff     777505 Jun 11  2015 apple.genes
+-rw-r--r--@  1 wesamazaizeh  staff  116165399 Jun 11  2015 apple.genome
+$ grep -c ">" apple.genome
+3
+$ less apple.genes
+$ cut -f1 apple.genes | sort -u | wc -l
+    5453
+$ cut -f2 apple.genes | sort -u | wc -l
+    5456
+$ cut -f1 apple.genes | sort | uniq -c | less
+$ cut -f1 apple.genes | sort | uniq -c | grep -c " 1 "
+5450
+$ cut -f1 apple.genes | sort | uniq -c | grep -vc " 1 "
+3
+$ cut -f1,4 apple.genes | sort -u | cut -f2 | sort | uniq -c
+2662 +
+2791 -
+$ cut -f1,3 apple.genes | sort -u | cut -f2 | sort | uniq -c
+1624 chr1
+2058 chr2
+1771 chr3
+$ cut -f3 apple.genes | sort | uniq -c
+1625 chr1
+2059 chr2
+1772 chr3
+$ cut -f1 apple.conditionA | sort -u > apple.conditionA.sorted
+$ cut -f1 apple.conditionB | sort -u > apple.conditionB.sorted 
+$ cut -f1 apple.conditionC | sort -u > apple.conditionC.sorted
+$ comm -1 -2 apple.conditionA.sorted apple.conditionB.sorted | wc -l
+    2410
+$ comm -2 -3 apple.conditionA.sorted apple.conditionB.sorted | wc -l
+    1205
+$ comm -1 -3 apple.conditionA.sorted apple.conditionB.sorted | wc -l
+   1243
+ $ comm -1 -2 apple.conditionA.sorted apple.conditionB.sorted | comm -1 -2 - apple.condit
+ ionC.sorted | wc -l
+     1608
